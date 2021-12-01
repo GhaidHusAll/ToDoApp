@@ -7,6 +7,7 @@ import android.text.InputType
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todoapp.databinding.ToDoRowsBinding
 
@@ -46,11 +47,13 @@ class ListAdapter (private var list: ArrayList<Task>,private val theContext: Con
             alertBuilder.setPositiveButton("Edit", DialogInterface.OnClickListener { _, _ ->
                 task.taskName = taskInput.text.toString()
                 this.notifyDataSetChanged()
+                Toast.makeText(theContext, "Task Edited!", Toast.LENGTH_LONG).show()
 
             })
             alertBuilder.setNeutralButton("Delete", DialogInterface.OnClickListener { _, _ ->
                 list.removeAt(position)
                 this.notifyDataSetChanged()
+                Toast.makeText(theContext, "Task Deleted!", Toast.LENGTH_LONG).show()
 
             })
             alertBuilder.setNegativeButton("Close", DialogInterface.OnClickListener {
