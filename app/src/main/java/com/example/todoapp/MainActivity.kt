@@ -1,8 +1,7 @@
 package com.example.todoapp
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.DialogInterface
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
@@ -19,7 +18,6 @@ import java.util.ArrayList
 class MainActivity : AppCompatActivity() {
  private lateinit var adapter : ListAdapter
  private lateinit var list : ArrayList<Task>
-    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,22 +39,23 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun alertDialog(adapter:ListAdapter){
         val alertBuilder = AlertDialog.Builder(this)
         val taskInput = EditText(this)
         taskInput.hint = "Enter New Task"
         taskInput.inputType = InputType.TYPE_CLASS_TEXT
         alertBuilder.setView(taskInput)
-        alertBuilder.setPositiveButton("Add", DialogInterface.OnClickListener { _, _ ->
-            list.add(Task(taskInput.text.toString(),false))
-            adapter?.notifyDataSetChanged()
+        alertBuilder.setPositiveButton("Add") { _, _ ->
+            list.add(Task(taskInput.text.toString(), false))
+            adapter.notifyDataSetChanged()
             Toast.makeText(this, "Task Added!", Toast.LENGTH_LONG).show()
 
 
-        })
-        alertBuilder.setNegativeButton("Close", DialogInterface.OnClickListener {
-                dialog, _ -> dialog.cancel()
-        })
+        }
+        alertBuilder.setNegativeButton("Close") { dialog, _ ->
+            dialog.cancel()
+        }
         val alert = alertBuilder.create()
         alert.setTitle("Add New Task")
         alert.show()
@@ -75,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+    @SuppressLint("NotifyDataSetChanged")
     private fun deleteAllCheckedItem(){
         var count = 0
         for (item in  list){
@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "No Tasks to Delete!", Toast.LENGTH_LONG).show()
 
         }
-        adapter?.notifyDataSetChanged()
+        adapter.notifyDataSetChanged()
 
     }
 }

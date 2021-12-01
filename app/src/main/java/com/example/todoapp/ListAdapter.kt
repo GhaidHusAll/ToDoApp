@@ -1,7 +1,7 @@
 package com.example.todoapp
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Color
 import android.text.InputType
 import android.view.LayoutInflater
@@ -20,8 +20,9 @@ class ListAdapter (private var list: ArrayList<Task>,private val theContext: Con
             ToDoRowsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
+    @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        var task = list[position]
+        val task = list[position]
         holder.binding.apply {
             tvTask.text = task.taskName
             if (task.isDone){
@@ -33,7 +34,7 @@ class ListAdapter (private var list: ArrayList<Task>,private val theContext: Con
 
             }
         }
-        holder.binding.ckIsDone.setOnClickListener() {
+        holder.binding.ckIsDone.setOnClickListener {
            task.isDone =  !task.isDone
             this.notifyDataSetChanged()
         }
@@ -44,21 +45,21 @@ class ListAdapter (private var list: ArrayList<Task>,private val theContext: Con
             taskInput.hint = "Edit Task"
             taskInput.inputType = InputType.TYPE_CLASS_TEXT
             alertBuilder.setView(taskInput)
-            alertBuilder.setPositiveButton("Edit", DialogInterface.OnClickListener { _, _ ->
+            alertBuilder.setPositiveButton("Edit") { _, _ ->
                 task.taskName = taskInput.text.toString()
                 this.notifyDataSetChanged()
                 Toast.makeText(theContext, "Task Edited!", Toast.LENGTH_LONG).show()
 
-            })
-            alertBuilder.setNeutralButton("Delete", DialogInterface.OnClickListener { _, _ ->
+            }
+            alertBuilder.setNeutralButton("Delete") { _, _ ->
                 list.removeAt(position)
                 this.notifyDataSetChanged()
                 Toast.makeText(theContext, "Task Deleted!", Toast.LENGTH_LONG).show()
 
-            })
-            alertBuilder.setNegativeButton("Close", DialogInterface.OnClickListener {
-                    dialog, _ -> dialog.cancel()
-            })
+            }
+            alertBuilder.setNegativeButton("Close") { dialog, _ ->
+                dialog.cancel()
+            }
             val alert = alertBuilder.create()
             alert.setTitle("Add New Task")
             alert.show()
